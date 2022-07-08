@@ -101,9 +101,10 @@ func runCheckout(cmd *cobra.Command, args []string) error {
 }
 
 var checkoutCmd = &cobra.Command{
-	Use:   "checkout [ticket]",
-	Short: "Checkout bro",
-	RunE:  runCheckout,
+	Use:     "checkout [ticket] [description]",
+	Aliases: []string{"co"},
+	Short:   "Checkout a branch using a ticket number and optional description",
+	RunE:    runCheckout,
 }
 
 func init() {
