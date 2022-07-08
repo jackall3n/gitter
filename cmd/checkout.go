@@ -5,66 +5,12 @@ Copyright © 2022 Jack Allen <me@jackallen.me>
 package cmd
 
 import (
-	"bufio"
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"os"
 	"os/exec"
-	"regexp"
-	"strconv"
 	"strings"
 )
-
-func getTicket(args []string) string {
-	var ticket string
-	project := viper.GetString("project")
-
-	if len(args) > 0 {
-		ticket = args[0]
-	} else {
-		reader := bufio.NewReader(os.Stdin)
-		fmt.Printf("ticket: ")
-		text, _ := reader.ReadString('\n')
-		text = strings.Replace(text, "\n", "", -1)
-
-		ticket = text
-	}
-
-	_, err := strconv.Atoi(ticket)
-
-	if err == nil && project != "" {
-		ticket = fmt.Sprintf("%s-%s", project, ticket)
-	}
-
-	return strings.ToUpper(ticket)
-
-}
-
-func getDescription(args []string) string {
-	var description string
-
-	if len(args) > 1 {
-		description = args[1]
-	} else {
-		reader := bufio.NewReader(os.Stdin)
-		fmt.Printf("description: ")
-		text, _ := reader.ReadString('\n')
-		text = strings.Replace(text, "\n", "", -1)
-
-		description = text
-	}
-
-	sp := regexp.MustCompile(" ")
-
-	description = sp.ReplaceAllString(description, "-")
-
-	lr := regexp.MustCompile("[^A-Za-z\\d-_]")
-
-	description = lr.ReplaceAllString(description, "")
-
-	return strings.ToLower(description)
-}
 
 func runCheckout(cmd *cobra.Command, args []string) error {
 	prefix := viper.GetString("prefix")

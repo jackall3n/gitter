@@ -1,8 +1,7 @@
 package cmd
 
 import (
-	"errors"
-	"fmt"
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -45,38 +44,9 @@ func initConfig() {
 
 	viper.AutomaticEnv()
 
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		//fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
-	}
-}
-
-func getConfigPath() (string, error) {
-	if cfgFile != "" {
-		return cfgFile, nil
-	}
-
-	localPath, err := os.Getwd()
+	err := viper.ReadInConfig()
 
 	if err != nil {
-		return "", err
+		log.Fatal(err)
 	}
-
-	// Locally
-	if _, err := os.Stat(fmt.Sprintf("%s/.gitter.yaml", localPath)); err == nil {
-		return localPath, nil
-	}
-
-	homePath, err := os.UserHomeDir()
-
-	if err != nil {
-		return "", err
-	}
-
-	// Globally
-	if _, err := os.Stat(fmt.Sprintf("%s/.gitter.yaml", homePath)); err == nil {
-		return homePath, nil
-	}
-
-	return "", errors.New("unable to find config file")
 }
