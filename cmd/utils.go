@@ -126,5 +126,11 @@ func getJiraDescription(ticket string) string {
 		return ""
 	}
 
-	return formatDescription(issue.Fields.Summary[:40])
+	description := formatDescription(issue.Fields.Summary)
+
+	if len(description) > 40 {
+		return description[:40]
+	}
+
+	return description
 }
