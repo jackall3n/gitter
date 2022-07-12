@@ -58,7 +58,7 @@ func getTicketFromBranch(branch string) string {
 			if len(matches) < i {
 				return ""
 			}
-			
+
 			return matches[i]
 		}
 	}
@@ -86,7 +86,16 @@ func runCommit(cmd *cobra.Command, args []string) {
 		commit = fmt.Sprintf("[%s]: %s", ticket, message)
 	}
 
-	exec.Command("git", "commit", "-m", commit)
+	coCmd := exec.Command("git", "commit", "-m", commit)
+
+	out, err := coCmd.CombinedOutput()
+
+	fmt.Println(string(out))
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	return
 }
