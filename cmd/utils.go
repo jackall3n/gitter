@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"github.com/andygrunwald/go-jira"
 	"github.com/spf13/viper"
 	"os"
 	"regexp"
@@ -72,6 +73,18 @@ func getTicket(args []string) string {
 
 }
 
+func formatDescription(description string) string {
+	sp := regexp.MustCompile(" ")
+
+	description = sp.ReplaceAllString(description, "-")
+
+	lr := regexp.MustCompile("[^A-Za-z\\d-_]")
+
+	description = lr.ReplaceAllString(description, "")
+
+	return strings.ToLower(description)
+}
+
 /**
 Get description from either an argument or user input
 */
@@ -89,13 +102,29 @@ func getDescription(args []string) string {
 		description = text
 	}
 
-	sp := regexp.MustCompile(" ")
+	return formatDescription(description)
+}
 
-	description = sp.ReplaceAllString(description, "-")
+func getJiraDescription(ticket string) string {
+	username := os.Getenv("JIRA_EMAIL")
+	password := os.Getenv("JIRA_API_TOKEN")
 
-	lr := regexp.MustCompile("[^A-Za-z\\d-_]")
+	if username == "" || password == "" {
+		return ""
+	}
 
-	description = lr.ReplaceAllString(description, "")
+	tp := jira.BasicAuthTransport{
+		Username: username,
+		Password: password,
+	}
 
-	return strings.ToLower(description)
+	client, _ := jira.NewClient(tp.Client(), "https://bulbenergy.atlassian.net")
+
+	issue, _, _ := client.Issue.Get(ticket, nil)
+
+	if issue == nil {
+		return ""
+	}
+
+	return formatDescription(issue.Fields.Summary[:40])
 }

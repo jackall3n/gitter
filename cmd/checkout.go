@@ -22,9 +22,14 @@ func runCheckout(cmd *cobra.Command, args []string) error {
 	}
 
 	ticket := getTicket(args)
+
 	segments = append(segments, ticket)
 
 	description := getDescription(args)
+
+	if description == "" {
+		description = getJiraDescription(ticket)
+	}
 
 	if description != "" {
 		segments = append(segments, description)
@@ -54,6 +59,7 @@ var checkoutCmd = &cobra.Command{
 }
 
 func init() {
+
 	rootCmd.AddCommand(checkoutCmd)
 
 	checkoutCmd.PersistentFlags().String("prefix", "", "An optional prefix")
