@@ -7,7 +7,7 @@ go install github.com/jackall3n/gitter
 ```
 
 ## Example
-![Example](example-1.png)
+![Example](.github/images/checkout.png)
 
 ## Usage
 
@@ -47,15 +47,15 @@ cm [ticket]
 
 #### Example
 ```shell
-Development/bulb-git/account  master ✗                                                                                          15h19m  
-▶ co 123                
-description: Something really important
+Development/bulb-git/account  master ✗
+▶ co 123
+description: Something really important 
 
-Development/bulb-git/account  ja/UAP-123/something-really-important ✗                                                        15h20m ◒  ⍉
+Development/bulb-git/account  ja/UAP-123/something-really-important ✗ 
 ▶ cm
 message: The important work
 
-Development/bulb-git/account  ja/UAP-123/something-really-important ✔                                                               2m  
+Development/bulb-git/account  ja/UAP-123/something-really-important ✔
 ▶ git log -1 --oneline
 (HEAD -> ja/UAP-123/something-really-important) [UAP-123]: The important work
 ```
